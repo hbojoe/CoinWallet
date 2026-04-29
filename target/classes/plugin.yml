@@ -1,0 +1,36 @@
+﻿name: CoinWallet
+version: '1.1'
+main: me.hboj.CoinWallet
+api-version: "1.21"
+softdepend: [Vault]
+commands:
+  coinwallet:
+    description: CoinWallet admin commands
+    usage: /coinwallet eco <give|take> <player> <bronze|silver|gold> <amount>
+  wallet:
+    description: to open wallet
+  walletbal:
+    description: to get value of wallet coins
+  wallettop:
+    description: get leaderboard
+permissions:
+  coinwallet.wallet:
+    description: Allows players to open their own wallet
+    default: true
+  coinwallet.walletbal:
+    description: Allows players to check their balance
+    default: true
+  coinwallet.walletbal-others:
+    description: Allows checking other players' balance
+    default: op
+  coinwallet.wallet-others:
+    description: Allows opening other players' wallets (Admin View)
+    default: op
+  coinwallet.wallettop:
+    description: Allows viewing the leaderboard
+    default: true
+  coinwallet.eco:
+    description: Allows using coinwallet eco give/take
+    default: op
+
+

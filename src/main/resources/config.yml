@@ -1,0 +1,58 @@
+SQL:
+  use-mysql: false
+  host: localhost
+  port: '3306'
+  database: "plugins"
+  username: root
+  password: 'password'
+vault-hook:
+  enabled: false
+coins:
+  bronze:
+    id: 10011
+    material: PAPER
+    name: "&cBronze Coin"
+  silver:
+    id: 10010
+    material: PAPER
+    name: "&7Silver Coin"
+  gold:
+    id: 10009
+    material: PAPER
+    name: "&6Gold Coin"
+# this is the prefix that will display on player messages where its needed
+prefix: "&#00fff2[hCoinWallet] "
+messages:
+  mysql-not-connected: "&cdatabase is not connected this feature is disabled"
+  not-a-player: "&cYou are not a player"
+  player-dont-exist: "&cPlayer Doesnt exist"
+  #  %GOLD% %SILVER% %BRONZE% are the normalized coin counts in the wallet.
+  #  %GOLD_VALUE% %SILVER_VALUE% %BRONZE_VALUE% are the value per coin tier.
+  walletbal-self: "&a You have %GOLD% Gold (&f%GOLD_VALUE% each&a), %SILVER% Silver (&f%SILVER_VALUE% each&a), and %BRONZE% Bronze (&f%BRONZE_VALUE% each&a)"
+  #  %PLAYER% give the player display/nickname
+  walletbal-other: "&a %PLAYER% has %GOLD% Gold (&f%GOLD_VALUE% each&a), %SILVER% Silver (&f%SILVER_VALUE% each&a), and %BRONZE% Bronze (&f%BRONZE_VALUE% each&a)"
+  walletbal-layout:
+    header-self: "&eWallet &7>> &fYour balance breakdown"
+    header-other: "&eWallet &7>> &f%PLAYER%'s balance breakdown"
+    # Available placeholders: %PLAYER% %AMOUNT% %GOLD% %SILVER% %BRONZE% %GOLD_VALUE% %SILVER_VALUE% %BRONZE_VALUE%
+    lines:
+      - "&8&m------------------------------"
+      - "&6GoldCoin &7>> &fBalance: &e%GOLD%G"
+      - "&7SilverCoin &7>> &fBalance: &e%SILVER%S"
+      - "&cCopperCoin &7>> &fBalance: &e%BRONZE%C"
+      - "&8&m------------------------------"
+      - "&eTotal Value &7>> &f%AMOUNT%C"
+  wallet-top:
+    #   this message will show first and has %TOTAL_COINS% for total bronze-value balance
+    header: "&#ff6f00Top Coin Wallet List Total coins: %TOTAL_COINS%"
+    #    %RANK% is the rank of the player this will get formated as "[#1] playername: 64"
+    list: "&#a020f0[#%RANK%] &b%PLAYER%: &e%AMOUNT%"
+  eco-usage: "&cUsage: /coinwallet eco <give|take> <player> <bronze|silver|gold> <amount>"
+  eco-invalid-action: "&cInvalid action. Use give or take."
+  eco-invalid-coin: "&cInvalid coin type. Use bronze, silver, or gold."
+  eco-invalid-amount: "&cAmount must be a positive whole number."
+  eco-wallet-full: "&cThat would exceed this player's wallet capacity."
+  eco-insufficient: "&cThat player does not have enough funds."
+  eco-give-success: "&aGave %COIN_AMOUNT% %COIN_TYPE% to %PLAYER%. &7Now: %GOLD%G %SILVER%S %BRONZE%B"
+  eco-take-success: "&aTook %COIN_AMOUNT% %COIN_TYPE% from %PLAYER%. &7Now: %GOLD%G %SILVER%S %BRONZE%B"
+  eco-notify-target: "&eYour wallet was updated: %ACTION% %COIN_AMOUNT% %COIN_TYPE%. &7Now: %GOLD%G %SILVER%S %BRONZE%B"
