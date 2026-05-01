@@ -24,8 +24,8 @@ CoinWallet is a hybrid physical economy plugin for Minecraft 1.21 that stores cu
 | `/walletbal` | `coinwallet.walletbal` | Check your wallet balance |
 | `/walletbal [player]` | `coinwallet.walletbal-others` | Check another player's balance |
 | `/wallettop` | `coinwallet.wallettop` | View leaderboard |
-| `/coinwallet eco give <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Add typed coins to a wallet |
-| `/coinwallet eco take <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Remove typed coins from a wallet |
+| `/coinwallet eco give <player> <bronze,silver,gold> <amount>` | `coinwallet.eco` | Add typed coins to a wallet |
+| `/coinwallet eco take <player> <bronze,silver,gold> <amount>` | `coinwallet.eco` | Remove typed coins from a wallet |
 
 ## Configuration
 
