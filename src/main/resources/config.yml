@@ -7,6 +7,9 @@ SQL:
   password: 'password'
 vault-hook:
   enabled: false
+# Extra root commands that should behave like /wallet.
+# Example: [pouch, purse] allows /pouch, /pouch bal, and /pouch eco give ...
+wallet-aliases: []
 coins:
   bronze:
     id: 10011
@@ -47,7 +50,7 @@ messages:
     header: "&#ff6f00Top Coin Wallet List Total coins: %TOTAL_COINS%"
     #    %RANK% is the rank of the player this will get formated as "[#1] playername: 64"
     list: "&#a020f0[#%RANK%] &b%PLAYER%: &e%AMOUNT%"
-  eco-usage: "&cUsage: /coinwallet eco <give|take> <player> <bronze|silver|gold> <amount>"
+  eco-usage: "&cUsage: /wallet eco <give|take> <player> <bronze|silver|gold> <amount>"
   eco-invalid-action: "&cInvalid action. Use give or take."
   eco-invalid-coin: "&cInvalid coin type. Use bronze, silver, or gold."
   eco-invalid-amount: "&cAmount must be a positive whole number."

@@ -8,13 +8,13 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class WalletbalCommand implements CommandExecutor {
+public class WalletbalCommand implements TabExecutor {
 
     private final CoinWallet plugin;
 
@@ -62,6 +62,14 @@ public class WalletbalCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1 && sender.hasPermission("coinwallet.walletbal-others")) {
+            return CommandSuggestions.onlinePlayers(args[0]);
+        }
+        return List.of();
     }
 
     private void sendBalanceBreakdown(CommandSender sender, String playerName, int amount, boolean selfView) {

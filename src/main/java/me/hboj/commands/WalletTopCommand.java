@@ -5,13 +5,13 @@ import me.hboj.util.ChatUtil;
 import me.hboj.util.WalletTopUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class WalletTopCommand implements CommandExecutor {
+public class WalletTopCommand implements TabExecutor {
 
     CoinWallet plugin;
 
@@ -50,6 +50,14 @@ public class WalletTopCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1 && sender.hasPermission("coinwallet.wallettop")) {
+            return CommandSuggestions.matching(List.of("1", "2", "3"), args[0]);
+        }
+        return List.of();
     }
 }
 

@@ -7,11 +7,13 @@ import me.hboj.util.CoinUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-public class CoinWalletCommand implements CommandExecutor {
+import java.util.List;
+
+public class CoinWalletCommand implements TabExecutor {
 
     private final CoinWallet plugin;
 
@@ -21,12 +23,16 @@ public class CoinWalletCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return executeEcoCommand(sender, label, args);
+    }
+
+    public boolean executeEcoCommand(CommandSender sender, String label, String[] args) {
         if (!sender.hasPermission("coinwallet.eco")) {
             return true;
         }
 
         if (args.length != 5 || !args[0].equalsIgnoreCase("eco")) {
-            sender.sendMessage(ChatUtil.formatWithPrefix(getMessage("messages.eco-usage", "&cUsage: /coinwallet eco <give|take> <player> <bronze|silver|gold> <amount>")));
+            sender.sendMessage(ChatUtil.formatWithPrefix(getEcoUsage(label)));
             return true;
         }
 
@@ -127,6 +133,47 @@ public class CoinWalletCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return tabCompleteEco(sender, args);
+    }
+
+    public List<String> tabCompleteEco(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("coinwallet.eco")) {
+            return List.of();
+        }
+
+        if (args.length == 1) {
+            return CommandSuggestions.matching(List.of("eco"), args[0]);
+        }
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("eco")) {
+            return CommandSuggestions.matching(List.of("give", "take"), args[1]);
+        }
+
+        if (args.length == 3 && args[0].equalsIgnoreCase("eco")) {
+            return CommandSuggestions.onlinePlayers(args[2]);
+        }
+
+        if (args.length == 4 && args[0].equalsIgnoreCase("eco")) {
+            return CommandSuggestions.matching(List.of("bronze", "silver", "gold"), args[3]);
+        }
+
+        if (args.length == 5 && args[0].equalsIgnoreCase("eco")) {
+            return CommandSuggestions.matching(List.of("1", "10", "64"), args[4]);
+        }
+
+        return List.of();
+    }
+
+    private String getEcoUsage(String label) {
+        String usage = getMessage("messages.eco-usage", "&cUsage: /wallet eco <give|take> <player> <bronze|silver|gold> <amount>");
+        if (label.equalsIgnoreCase("coinwallet:eco")) {
+            return usage.replace("/coinwallet eco", "/" + label).replace("/wallet eco", "/" + label);
+        }
+        return usage.replace("/coinwallet", "/" + label).replace("/wallet", "/" + label);
     }
 
     private String getMessage(String path, String fallback) {

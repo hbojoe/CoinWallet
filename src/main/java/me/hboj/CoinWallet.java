@@ -12,10 +12,15 @@ import me.hboj.listener.InventoryListener;
 import me.hboj.util.ChatUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 public final class CoinWallet extends JavaPlugin {
@@ -37,10 +42,14 @@ public final class CoinWallet extends JavaPlugin {
         api = new CoinWalletAPIImpl(this);
 
         getServer().getPluginManager().registerEvents(new InventoryListener(this) , this);
-        registerCommand("wallet", new WalletCommand(this));
-        registerCommand("walletbal", new WalletbalCommand(this));
-        registerCommand("wallettop", new WalletTopCommand(this));
-        registerCommand("coinwallet", new CoinWalletCommand(this));
+        CoinWalletCommand coinWalletCommand = new CoinWalletCommand(this);
+        WalletbalCommand walletbalCommand = new WalletbalCommand(this);
+        WalletTopCommand walletTopCommand = new WalletTopCommand(this);
+
+        WalletCommand walletCommand = new WalletCommand(this, coinWalletCommand, walletbalCommand, walletTopCommand);
+        registerCommand("wallet", walletCommand);
+        getServer().getCommandMap().register(getDescription().getName().toLowerCase(), new me.hboj.commands.NamespacedEcoCommand(coinWalletCommand));
+        registerWalletAliases(walletCommand);
         getServer().getServicesManager().register(CoinWalletAPI.class, api, this, org.bukkit.plugin.ServicePriority.Highest);
 
         sql_enabled = this.getConfig().getBoolean("SQL.use-mysql");
@@ -117,5 +126,46 @@ public final class CoinWallet extends JavaPlugin {
             throw new IllegalStateException("Command '" + commandName + "' is missing from plugin.yml");
         }
         pluginCommand.setExecutor(executor);
+        if (executor instanceof TabCompleter tabCompleter) {
+            pluginCommand.setTabCompleter(tabCompleter);
+        }
+    }
+
+    private void registerWalletAliases(WalletCommand walletCommand) {
+        List<String> aliases = getConfig().getStringList("wallet-aliases");
+        if (aliases.isEmpty()) {
+            String singleAlias = getConfig().getString("wallet-alias");
+            if (singleAlias != null && !singleAlias.isBlank()) {
+                aliases = List.of(singleAlias);
+            }
+        }
+
+        if (aliases.isEmpty()) {
+            return;
+        }
+
+        CommandMap commandMap = getServer().getCommandMap();
+        Set<String> registeredAliases = new HashSet<>();
+        Set<String> reservedCommands = Set.of("wallet", "walletbal", "wallettop", "coinwallet");
+
+        for (String configuredAlias : aliases) {
+            String alias = configuredAlias == null ? "" : configuredAlias.trim().toLowerCase();
+            if (alias.isBlank() || !registeredAliases.add(alias)) {
+                continue;
+            }
+
+            if (!alias.matches("[a-z0-9_-]+")) {
+                getLogger().warning("Skipping invalid wallet alias '" + configuredAlias + "'. Use only letters, numbers, underscores, or hyphens.");
+                continue;
+            }
+
+            if (reservedCommands.contains(alias) || commandMap.getCommand(alias) != null) {
+                getLogger().warning("Skipping wallet alias '" + alias + "' because that command is already registered.");
+                continue;
+            }
+
+            commandMap.register(getDescription().getName().toLowerCase(), new me.hboj.commands.WalletAliasCommand(alias, walletCommand));
+            getLogger().info("Registered wallet alias /" + alias);
+        }
     }
 }

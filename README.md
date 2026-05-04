@@ -21,15 +21,19 @@ CoinWallet is a hybrid physical economy plugin for Minecraft 1.21 that stores cu
 | :--- | :--- | :--- |
 | `/wallet` | `coinwallet.wallet` | Open your wallet |
 | `/wallet [player]` | `coinwallet.wallet-others` | Open another player's wallet |
-| `/walletbal` | `coinwallet.walletbal` | Check your wallet balance |
-| `/walletbal [player]` | `coinwallet.walletbal-others` | Check another player's balance |
-| `/wallettop` | `coinwallet.wallettop` | View leaderboard |
-| `/coinwallet eco give <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Add typed coins to a wallet |
-| `/coinwallet eco take <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Remove typed coins from a wallet |
+| `/wallet bal` | `coinwallet.walletbal` | Check your wallet balance |
+| `/wallet bal [player]` | `coinwallet.walletbal-others` | Check another player's balance |
+| `/wallet top [page]` | `coinwallet.wallettop` | View leaderboard |
+| `/wallet eco give <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Add typed coins to a wallet |
+| `/wallet eco take <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Remove typed coins from a wallet |
+| `/coinwallet:wallet` | `coinwallet.wallet` | Namespaced wallet command |
+| `/coinwallet:eco give <player> <bronze|silver|gold> <amount>` | `coinwallet.eco` | Namespaced admin economy command |
 
 ## Configuration
 
 ```yaml
+wallet-aliases:
+  - pouch
 coins:
   bronze:
     id: 10011
@@ -49,7 +53,7 @@ Set each `material` to the base material used by your ItemsAdder coins if you wa
 - Conversion is fixed at `64:1` between tiers:
   - `64` Bronze = `1` Silver
   - `64` Silver = `1` Gold
-- `/walletbal` displays per-coin counts (gold/silver/bronze) and per-coin values instead of only a single total.
+- `/wallet bal` displays per-coin counts (gold/silver/bronze) and per-coin values instead of only a single total.
 - Set `vault-hook.enabled: true` only if you explicitly want CoinWallet exposed as a Vault economy provider.
 
 Default prefix: `[Coin Wallet]`
